@@ -10,14 +10,13 @@ import javax.net.ssl.SSLEngine;
 /**
  * Add SSL/TLS support
  * <p>
- * Created by lenovo on 2017/6/7 15:35
+ * Created by wugy on 2017/6/7 15:35
  */
 public class SslChannelInitializer extends ChannelInitializer<Channel> {
 
     private final SSLContext context;
     private final boolean client;
     private final boolean startTls;
-
 
     public SslChannelInitializer(SSLContext context, boolean client, boolean startTls) {
         this.context = context;
@@ -26,7 +25,6 @@ public class SslChannelInitializer extends ChannelInitializer<Channel> {
     }
 
     @Override
-
     protected void initChannel(Channel ch) throws Exception {
         SSLEngine engine = context.createSSLEngine();
         engine.setUseClientMode(client);

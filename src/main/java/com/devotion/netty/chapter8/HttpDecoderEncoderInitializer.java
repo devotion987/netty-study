@@ -9,7 +9,9 @@ import io.netty.handler.codec.http.HttpResponseDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 
 /**
- * Created by lenovo on 2017/6/7 15:55
+ * Add support for HTTP
+ * <p>
+ * Created by wugy on 2017/6/7 15:55
  */
 public class HttpDecoderEncoderInitializer extends ChannelInitializer<Channel> {
 
