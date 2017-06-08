@@ -13,12 +13,12 @@ import java.util.List;
  */
 @ChannelHandler.Sharable
 public class WebSocketConvertHandler extends MessageToMessageCodec<WebSocketFrame,
-        WebSocketConvertHandler.FrameWebSocket> {
+        WebSocketConvertHandler.WebSocketFrame> {
 
     private static final WebSocketConvertHandler INSTANCE = new WebSocketConvertHandler();
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, FrameWebSocket msg, List<Object> out)
+    protected void encode(ChannelHandlerContext ctx, WebSocketFrame msg, List<Object> out)
             throws Exception {
         ByteBuf payload = msg.getData().duplicate().retain();
         switch (msg.getType()) {
@@ -47,26 +47,26 @@ public class WebSocketConvertHandler extends MessageToMessageCodec<WebSocketFram
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, WebSocketFrame msg, List<Object> out)
-            throws Exception {
+    protected void decode(ChannelHandlerContext ctx, io.netty.handler.codec.http.websocketx.WebSocketFrame msg,
+                          List<Object> out) throws Exception {
         if (msg instanceof BinaryWebSocketFrame) {
-            out.add(new FrameWebSocket(FrameWebSocket.FrameType.BINARY, msg.content().copy()));
+            out.add(new WebSocketFrame(WebSocketFrame.FrameType.BINARY, msg.content().copy()));
         } else if (msg instanceof CloseWebSocketFrame) {
-            out.add(new FrameWebSocket(FrameWebSocket.FrameType.CLOSE, msg.content().copy()));
+            out.add(new WebSocketFrame(WebSocketFrame.FrameType.CLOSE, msg.content().copy()));
         } else if (msg instanceof PingWebSocketFrame) {
-            out.add(new FrameWebSocket(FrameWebSocket.FrameType.PING, msg.content().copy()));
+            out.add(new WebSocketFrame(WebSocketFrame.FrameType.PING, msg.content().copy()));
         } else if (msg instanceof PongWebSocketFrame) {
-            out.add(new FrameWebSocket(FrameWebSocket.FrameType.PONG, msg.content().copy()));
+            out.add(new WebSocketFrame(WebSocketFrame.FrameType.PONG, msg.content().copy()));
         } else if (msg instanceof TextWebSocketFrame) {
-            out.add(new FrameWebSocket(FrameWebSocket.FrameType.TEXT, msg.content().copy()));
+            out.add(new WebSocketFrame(WebSocketFrame.FrameType.TEXT, msg.content().copy()));
         } else if (msg instanceof ContinuationWebSocketFrame) {
-            out.add(new FrameWebSocket(FrameWebSocket.FrameType.CONTINUATION, msg.content().copy()));
+            out.add(new WebSocketFrame(WebSocketFrame.FrameType.CONTINUATION, msg.content().copy()));
         } else {
             throw new IllegalStateException("Unsupported websocket msg " + msg);
         }
     }
 
-    public static final class FrameWebSocket {
+    public static final class WebSocketFrame {
 
         public enum FrameType {
             BINARY,
@@ -80,7 +80,7 @@ public class WebSocketConvertHandler extends MessageToMessageCodec<WebSocketFram
         private final FrameType type;
         private final ByteBuf data;
 
-        public FrameWebSocket(FrameType type, ByteBuf data) {
+        public WebSocketFrame(FrameType type, ByteBuf data) {
             this.type = type;
             this.data = data;
         }
